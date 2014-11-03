@@ -1,0 +1,7 @@
+#!/bin/bash
+echo 'creating backup archive of /var/www/html'
+tar --create --gzip -vv --directory="/var/www/html/" --file="/backups/backup_`date '+%Y%m%d'`.tar.gz" "./"
+echo 'creating database dump'
+mysqldump -h $MYSQL_PORT_3306_TCP_ADDR --add-drop-table -u$MYSQL_ENV_MYSQL_USER -p $MYSQL_ENV_MYSQL_DATABASE --password=$MYSQL_ENV_MYSQL_PASSWORD | bzip2 -c > /backups/backup_`date '+%Y%m%d'`.sql.bz2
+echo 'Finished: SUCCESS'
+
