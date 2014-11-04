@@ -4,23 +4,34 @@ if ! [[ $1 ]]
 then
     echo "Error: Backup name missing"
     echo "Please specify a backup name, e.g. 'restore 20141104'"
-    echo "FINISHED: FAILURE"
+    echo "Finished: FAILURE"
     exit 0;
 fi
 
 if ! [[ $1 =~ ^[a-zA-Z0-9_-]+$ ]]
 then
   echo "The given backup name does not match the expected pattern: only characters, digits, underscore and dash are allowed ([a-zA-Z0-9_-])."
-  echo 'FINISHED: FAILURE'
+  echo 'Finished: FAILURE'
   exit 0
 fi
 
 FILES_ARCHIVE="/backups/backup_$1.tar.gz"
 SQL_ARCHIVE="/backups/backup_$1.sql.bz2"
 
+if [[ ! -f $FILES_ARCHIVE ]]
+then
+  echo "The file $FILES_ARCHIVE does not exist. Aborting."
+  echo "Finished: FAILURE."
+  exit 0
+fi
 
+if [[ ! -f $SQL_ARCHIVE ]]
+then
+  echo "The file $SQL_ARCHIVE does not exist. Aborting."
+  echo "Finished: FAILURE."
+  exit 0
+fi
 
-#TODO check if files exist
 
 # cleanup html folder
 echo "deleting files from /var/www/html/"
