@@ -1,6 +1,21 @@
 #!/bin/bash
 
-# TODO: check if $1 matches date
+if ! [[ $1 ]]
+then
+    echo "Error: Backup name missing"
+    echo "Please specify a backup name, e.g. 'restore 20141104'"
+    echo "FINISHED: FAILURE"
+    exit 0;
+fi
+
+if ! [[ $1 =~ ^[a-zA-Z0-9_-]+$ ]]
+then
+  echo "The given backup name does not match the expected pattern: only characters, digits, underscore and dash are allowed ([a-zA-Z0-9_-])."
+  echo 'FINISHED: FAILURE'
+  exit 0
+fi
+
+#TODO check if files exist
 
 # cleanup html folder
 echo "deleting files from /var/www/html/"
