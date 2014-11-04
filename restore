@@ -15,6 +15,11 @@ then
   exit 0
 fi
 
+FILES_ARCHIVE="/backups/backup_$1.tar.gz"
+SQL_ARCHIVE="/backups/backup_$1.sql.bz2"
+
+
+
 #TODO check if files exist
 
 # cleanup html folder
@@ -22,8 +27,8 @@ echo "deleting files from /var/www/html/"
 rm -R /var/www/html/*
 
 # restore files
-echo "restoring files from /backups/backup_$1.tar.gz to /var/www/html"
-tar -xzf /backups/backup_$1.tar.gz --directory="/var/www/html/"
+echo "restoring files from $FILES_ARCHIVE to /var/www/html"
+tar -xzf $FILES_ARCHIVE --directory="/var/www/html/"
 
 # update wp-config.php
 sed -i s/"define('DB_NAME', '.*');"/"define('DB_NAME', '$MYSQL_ENV_MYSQL_DATABASE');"/g /var/www/html/wp-config.php
@@ -35,7 +40,7 @@ sed -i s/"define('DB_HOST', '.*');"/"define('DB_HOST', '$MYSQL_PORT_3306_TCP_ADD
 chown -R www-data:www-data /var/www/html
 
 # restore database
-echo "restoring data from mysql dump file /backups/backup_$1.sql.bz2"
-bunzip2 < /backups/backup_$1.sql.bz2 | mysql -u$MYSQL_ENV_MYSQL_USER -p $MYSQL_ENV_MYSQL_DATABASE -p$MYSQL_ENV_MYSQL_PASSWORD -h $MYSQL_PORT_3306_TCP_ADDR
+echo "restoring data from mysql dump file $SQL_ARCHIVE"
+bunzip2 < $SQL_ARCHIVE | mysql -u$MYSQL_ENV_MYSQL_USER -p $MYSQL_ENV_MYSQL_DATABASE -p$MYSQL_ENV_MYSQL_PASSWORD -h $MYSQL_PORT_3306_TCP_ADDR
 
 echo 'Finished: SUCCESS'
