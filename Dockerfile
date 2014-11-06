@@ -7,9 +7,14 @@ RUN apt-get install mysql-client -y
 
 RUN mkdir /backups
 
+ENV BACKUP_TIME 0 3 * * *
+
+ADD docker-entrypoint.sh /entrypoint.sh
 ADD backup /
 ADD restore /
 
 VOLUME /backups
 
-CMD BASH
+ENTRYPOINT ["/entrypoint.sh"]
+
+CMD ["/bin/bash"]
