@@ -1,13 +1,16 @@
 #!/bin/bash
 
-# start cron deamon
+echo "Starting cron daemon..."
 cron
 
-#TODO: only create cron entry first time starting
+if ! [ -f backup-cron ]
+then
+  echo "Creating cron entry to start backup at: $BACKUP_TIME"
+  echo "$BACKUP_TIME /backup  > /dev/null 2>&1" > backup-cron
+  crontab backup-cron
+fi
 
-# create cron entry
-echo "$BACKUP_TIME /backup  > /dev/null 2>&1" > backup-cron
-crontab backup-cron
-rm backup-cron
+echo "Current crontab:"
+crontab -l
 
 exec "$@"
