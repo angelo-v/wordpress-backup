@@ -10,8 +10,8 @@ RUN mkdir /backups
 ENV BACKUP_TIME 0 3 * * *
 
 ADD docker-entrypoint.sh /entrypoint.sh
-ADD backup /
-ADD restore /
+ADD backup /bin/
+ADD restore /bin/
 
 VOLUME /backups
 
