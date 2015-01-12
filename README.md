@@ -11,9 +11,9 @@ Precondition: Given you have a wordpress blog and the corresponding mysql databa
 
 *Step 1*: Create and run a backup container linked to your wordpress and mysql containers
 
-`docker run -ti --name backup-my-blog --volumes-from=your-wordpress-container --link=your-mysql-container:mysql -d aveltens/backup-wordpress`
+`docker run --name backup-my-blog --volumes-from=your-wordpress-container --link=your-mysql-container:mysql -d aveltens/wp-backup`
 
-Replace the following  variables according to your system:
+Replace the following values according to your system:
 
 `your-word-press-container`: The name of the docker container hosting your blog  
 `your-mysql-container`: The name of the docker container hosting your blogs mysql database
@@ -36,21 +36,29 @@ All backups are timestamped with the date of the backup. So your blog can move b
 
 The docker image is available on the public docker hub under the name aveltens/backup-wordpress.
 
-wp-backup is a separte container, performing backup and restore operations. So you do not have to run a specific wordpress or mysql container, because wp-backup lives beside those, linking to them, but not... does not perform any change to your existing wordpress or mysql container.
+wp-backup is a separte container, performing backup and restore operations. The wordpress and mysql containers of your blog are linked to wp-backup, but they are not modified in any way.
 
-To run a backup container, link your wordpress and mysql containers
+To run a backup container, you use the `docker run` command, linking your wordpress and mysql containers:
 
-`docker run -ti --name backup-my-blog --volumes-from=your-wordpress-container --link=your-mysql-container:mysql -d aveltens/backup-wordpress`
+`docker run --name <backup-container-name> --volumes-from=<your-wordpress-container> --link=<your-mysql-container>:mysql -d aveltens/wp-backup`
 
-TODO: explain placeholders
+You have to replace the placeholders:
+
+<backup-container-name>: A name of your choice to identify the backup container
+<your-wordpress-container>: The name of the wordpress container
+<your-mysql-container>: The name of your mysql container
 
 You may also specify a volume to be able to access the backup files on the docker host:
 
-`docker run -ti --name backup-my-blog -v /host/path/to/backups:/backups --volumes-from=your-wordpress-container --link=your-mysql-container:mysql -d aveltens/backup-wordpress`
+`docker run --name <backup-container-name> -v </host/path/to/backups>:/backups --volumes-from=<your-wordpress-container> --link=<your-mysql-container>:mysql -d aveltens/wp-backup`
 
-TODO: explain volume
+</host/path/to/backups>: an absolute path on the system hosting the containers
+
+After creating a backup you find the backup files on that path on your host system.
 
 ## Manual backup
+
+Explain backup command, timestamp (only one backup per day at the moment) find backup files in the specified volume, Refer to automatic backup
 
 ## Restore
 
