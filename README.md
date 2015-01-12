@@ -1,13 +1,13 @@
 wp-backup
 =========
 
-wp-backup is a simple [docker][1] container that helps you backup and restore your wordpress blog.
+wp-backup is a simple [Docker][1] container that helps you backup and restore your wordpress blog.
 
  [1]: https://www.docker.com/
 
 ## Quick start
 
-Precondition: Given you have a wordpress blog and the corresponding mysql database running in docker containers. If not, see section "Migrate your blog to docker", to see how to move your existing blog into a docker container within minutes.
+Precondition: Given you have a wordpress blog and the corresponding mysql database running in Docker containers. If not, see section "Migrate your blog to Docker", to see how to move your existing blog into a Docker container within minutes.
 
 *Step 1*: Create and run a backup container linked to your wordpress and mysql containers
 
@@ -15,8 +15,8 @@ Precondition: Given you have a wordpress blog and the corresponding mysql databa
 
 Replace the following values according to your system:
 
-`your-word-press-container`: The name of the docker container hosting your blog  
-`your-mysql-container`: The name of the docker container hosting your blogs mysql database
+`your-word-press-container`: The name of the Docker container hosting your blog  
+`your-mysql-container`: The name of the Docker container hosting your blogs mysql database
 
 *Step 2*: Backup your blog
 
@@ -34,7 +34,7 @@ All backups are timestamped with the date of the backup. So your blog can move b
 
 ## Create and run the backup container
 
-The docker image is available on the public docker hub under the name aveltens/backup-wordpress.
+The Docker image is available on the public Docker hub under the name aveltens/backup-wordpress.
 
 wp-backup is a separte container, performing backup and restore operations. The wordpress and mysql containers of your blog are linked to wp-backup, but they are not modified in any way.
 
@@ -44,23 +44,35 @@ To run a backup container, you use the `docker run` command, linking your wordpr
 
 You have to replace the placeholders:
 
-<backup-container-name>: A name of your choice to identify the backup container
-<your-wordpress-container>: The name of the wordpress container
-<your-mysql-container>: The name of your mysql container
+`<backup-container-name>`: A name of your choice to identify the backup container  
+`<your-wordpress-container>`: The name of the wordpress container  
+`<your-mysql-container>`: The name of your mysql container  
 
-You may also specify a volume to be able to access the backup files on the docker host:
+You may also specify a volume to be able to access the backup files on the Docker host:
 
 `docker run --name <backup-container-name> -v </host/path/to/backups>:/backups --volumes-from=<your-wordpress-container> --link=<your-mysql-container>:mysql -d aveltens/wp-backup`
 
-</host/path/to/backups>: an absolute path on the system hosting the containers
+`</host/path/to/backups>`: an absolute path on the system hosting the containers
 
 After creating a backup you find the backup files on that path on your host system.
 
 ## Manual backup
 
+To manually create a backup of your wordpress blog use `docker exec` to run the backup command:
+
+`docker exec <backup-container-name> backup`
+
+`<backup-container-name>`: The name you chose when you created the container with `docker run`.
+
+> Note that `docker exec` requires at leat Docker 1.3.
+
+This will create two archive files under `/backups` in the container. If you mapped a volume you may see those files in the according directory on your host now. They should be named something like `backup_20141030.sql.bz2` and `backup_20141030.tar.gz`.
+
 Explain backup command, timestamp (only one backup per day at the moment) find backup files in the specified volume, Refer to automatic backup
 
 ## Restore
+
+> Note that `docker exec` requires at leat Docker 1.3.
 
 ## Automatic backups
 
