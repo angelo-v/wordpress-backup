@@ -11,12 +11,12 @@ Precondition: Given you have a WordPress blog and the corresponding MySQL databa
 
 *Step 1*: Create and run a backup container linked to your WordPress and MySQL containers
 
-`docker run --name backup-my-blog --volumes-from=your-WordPress-container --link=your-MySQL-container:MySQL -d aveltens/wp-backup`
+`docker run --name backup-my-blog --volumes-from=your-wordpress-container --link=your-mysql-container:mysql -d aveltens/wp-backup`
 
 Replace the following values according to your system:
 
-`your-word-press-container`: The name of the Docker container hosting your blog  
-`your-MySQL-container`: The name of the Docker container hosting your blogs MySQL database
+`your-wordpress-container`: The name of the Docker container hosting your blog  
+`your-mysql-container`: The name of the Docker container hosting your blogs MySQL database
 
 *Step 2*: Backup your blog
 
@@ -40,17 +40,17 @@ wp-backup is a separte container, performing backup and restore operations. The 
 
 To run a backup container, you use the `docker run` command, linking your WordPress and MySQL containers:
 
-`docker run --name <backup-container-name> --volumes-from=<your-WordPress-container> --link=<your-MySQL-container>:MySQL -d aveltens/wp-backup`
+`docker run --name <backup-container-name> --volumes-from=<your-WordPress-container> --link=<your-mysql-container>:mysql -d aveltens/wp-backup`
 
 You have to replace the placeholders:
 
 `<backup-container-name>`: A name of your choice to identify the backup container  
-`<your-WordPress-container>`: The name of the WordPress container  
-`<your-MySQL-container>`: The name of your MySQL container  
+`<your-wordpress-container>`: The name of the WordPress container  
+`<your-mysql-container>`: The name of your MySQL container  
 
 You may also specify a volume to be able to access the backup files on the Docker host:
 
-`docker run --name <backup-container-name> -v </host/path/to/backups>:/backups --volumes-from=<your-WordPress-container> --link=<your-MySQL-container>:MySQL -d aveltens/wp-backup`
+`docker run --name <backup-container-name> -v </host/path/to/backups>:/backups --volumes-from=<your-WordPress-container> --link=<your-mysql-container>:mysql -d aveltens/wp-backup`
 
 `</host/path/to/backups>`: an absolute path on the system hosting the containers
 
@@ -86,7 +86,9 @@ This will restore the database as well as the HTML content of your WordPress ins
 
 ## Automatic backups
 
-TODO: explain default backup time and how to adjust it.
+Per default wp-backup will automatically create a backup at 03:00 am every day. You can adjust that time by setting a cron expression to the variable BACKUP_TIME when creating the container. E.g. the following statement will create a container that does a backup at 2:00 am every day:
+
+`docker run --name <backup-container-name> --volumes-from=<your-WordPress-container> --link=<your-mysql-container>:mysql -d -e "BACKUP_TIME=0 2 * * *" aveltens/wp-backup`
 
 ## Migrate your blog to docker
 
