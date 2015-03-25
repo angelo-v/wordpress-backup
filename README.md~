@@ -1,7 +1,7 @@
 wp-backup
 =========
 
-wp-backup is a simple [Docker][1] container that helps you backup and restore your WordPress blog.
+wp-backup is a simple [Docker][1] container that helps you back up and restore your WordPress blog.
 
  [1]: https://www.docker.com/
 
@@ -70,7 +70,7 @@ This will create two archive files under `/backups` in the container. If you map
 
 The number within the filenames is a date in the format `yyyyMMdd` (4 digit year, 2 digit month, 2 digit day). This means there can only be one backup per day. If you do multiple backups a day the files will be replaced by the latest backup.
 
-> You do not have to backup manually. See Section "Automatic backups".
+> You do not have to back up manually. See Section "Automatic backups".
 
 ## Restore
 
