@@ -17,4 +17,4 @@ VOLUME /backups
 
 ENTRYPOINT ["/entrypoint.sh"]
 
-CMD ["/bin/bash"]
+CMD ["cron", "-f"]
