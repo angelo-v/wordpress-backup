@@ -90,9 +90,61 @@ Per default wordpress-backup will automatically create a backup at 03:00 am ever
 
 `docker run --name <backup-container-name> --volumes-from=<your-wordpress-container> --link=<your-mysql-container>:mysql -d -e "BACKUP_TIME=0 2 * * *" aveltens/wordpress-backup`
 
-## Migrate your blog to docker
+## Migrate your blog to Docker
 
-TODO: Explain how one can backup a blog manually and restore it with wordpress-backup to a docker container.
+If your WordPress blog is not yet running in a Docker container, you can migrate it with a few simple steps.
+
+1. Manually back up your database and files
+2. Create WordPress and MySQL containers
+3. Restore your backups to those containers with the help of wordpress-backup
+
+*Step 1:* Manually back up your database and files
+
+Use the following command to back up your blog's HTML contents:
+
+`tar --create --gzip -vv --directory="</path/to/wordpress>" --file="</path/to/your/backups>/backup_0.tar.gz" "./"`
+
+...and this command to backup your blog's database:
+
+`mysqldump --add-drop-table -u<wordpress-user> -p <wordpress-db> --password=<wordpress-password> | bzip2 -c > </path/to/your/backups>/backup_0.sql.bz2`
+
+You have to replace the placeholders in both commands:
+
+`</path/to/wordpress>`: The root directory of your WordPress installation.  
+`</path/to/your/backups>`: The folder where you want to store the backup files.  
+`<wordpress-db>`: The name of the WordPress database.  
+`<wordpress-user>`: The database user that WordPress uses.  
+`<wordpress-password>`: The password of the WordPress database user.  
+
+*Step 2:* 
+
+Create a MySQL container:
+
+`docker run --name wordpress-db -e MYSQL_ROOT_PASSWORD=<root-password> -e MYSQL_USER=wordpress -e MYSQL_PASSWORD=<user-password> -e MYSQL_DATABASE=wordpress -d mysql`
+
+Further explanation: https://registry.hub.docker.com/_/mysql/
+
+Create a WordPress container:
+
+`docker run --name wordpress --link wordpress-db:mysql -e WORDPRESS_DB_USER=wordpress -e WORDPRESS_DB_PASSWORD=<user-password> -e WORDPRESS_DB_NAME=wordpress -p 8080:80 -d wordpress`
+
+Further explanation: https://registry.hub.docker.com/_/wordpress/
+
+You should have a fresh WordPress installation at `http://localhost:8080/` now. Do not touch it. We will restore your backup in the next step.
+
+*Step 3:* Restore your backups to those containers with the help of wordpress-backup
+
+Create a wordpress-backup container:
+
+`docker run --name wordpress-backup -v <path/to/your/backups>:/backups --volumes-from=wordpress --link=wordpress-db:mysql -d aveltens/wordpress-backup`
+
+> Replace <path/to/your/backups> with the actual path the backup files have been stored before.
+
+...and finally restore your backup:
+
+`docker exec wordpress-backup restore 0`
+
+That's it! `http://localhost:8080/` should show your blog now.
 
 ## Contact
 
