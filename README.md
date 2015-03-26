@@ -146,6 +146,10 @@ Create a wordpress-backup container:
 
 That's it! `http://localhost:8080/` should show your blog now.
 
+## Source Code
+
+The source code of wordpress-backup can be found at [GitHub](https://github.com/angelo-v/wordpress-backup)
+
 ## Contact
 
 Please contact me for any questions & feedback: angelo.veltens@online.de
