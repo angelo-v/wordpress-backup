@@ -45,13 +45,13 @@ tar -xzf $FILES_ARCHIVE --directory="/var/www/html/"
 sed -i s/"define('DB_NAME', '.*');"/"define('DB_NAME', '$MYSQL_ENV_MYSQL_DATABASE');"/g /var/www/html/wp-config.php
 sed -i s/"define('DB_USER', '.*');"/"define('DB_USER', '$MYSQL_ENV_MYSQL_USER');"/g /var/www/html/wp-config.php
 sed -i s/"define('DB_PASSWORD', '.*');"/"define('DB_PASSWORD', '$MYSQL_ENV_MYSQL_PASSWORD');"/g /var/www/html/wp-config.php
-sed -i s/"define('DB_HOST', '.*');"/"define('DB_HOST', '$MYSQL_PORT_3306_TCP_ADDR:$MYSQL_PORT_3306_TCP_PORT');"/g /var/www/html/wp-config.php
+sed -i s/"define('DB_HOST', '.*');"/"define('DB_HOST', 'mysql:$MYSQL_PORT_3306_TCP_PORT');"/g /var/www/html/wp-config.php
 
 # set correct file owner
 chown -R www-data:www-data /var/www/html
 
 # restore database
 echo "restoring data from mysql dump file $SQL_ARCHIVE"
-bunzip2 < $SQL_ARCHIVE | mysql -u$MYSQL_ENV_MYSQL_USER -p $MYSQL_ENV_MYSQL_DATABASE -p$MYSQL_ENV_MYSQL_PASSWORD -h $MYSQL_PORT_3306_TCP_ADDR
+bunzip2 < $SQL_ARCHIVE | mysql -u$MYSQL_ENV_MYSQL_USER -p $MYSQL_ENV_MYSQL_DATABASE -p$MYSQL_ENV_MYSQL_PASSWORD -h mysql 
 
 echo 'Finished: SUCCESS'
