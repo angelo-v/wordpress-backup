@@ -5,14 +5,19 @@ then
     echo "Error: Backup name missing"
     echo "Please specify a backup name, e.g. 'restore 20141104'"
     echo "Finished: FAILURE"
-    exit 0;
+    exit 1
 fi
+
+if [ -z "$MYSQL_ENV_MYSQL_USER" ]; then echo "Error: MYSQL_ENV_MYSQL_USER not set"; echo "Finished: FAILURE"; exit 1; fi
+if [ -z "$MYSQL_ENV_MYSQL_DATABASE" ]; then echo "Error: MYSQL_ENV_MYSQL_DATABASE not set"; echo "Finished: FAILURE"; exit 1; fi
+if [ -z "$MYSQL_ENV_MYSQL_PASSWORD" ]; then echo "Error: MYSQL_ENV_MYSQL_PASSWORD not set"; echo "Finished: FAILURE"; exit 1; fi
+if [ -z "$MYSQL_PORT_3306_TCP_PORT" ]; then echo "Error: MYSQL_PORT_3306_TCP_PORT not set"; echo "Finished: FAILURE"; exit 1; fi
 
 if ! [[ $1 =~ ^[a-zA-Z0-9_-]+$ ]]
 then
   echo "The given backup name does not match the expected pattern: only characters, digits, underscore and dash are allowed ([a-zA-Z0-9_-])."
   echo 'Finished: FAILURE'
-  exit 0
+  exit 1
 fi
 
 FILES_ARCHIVE="/backups/backup_$1.tar.gz"
@@ -22,14 +27,14 @@ if [[ ! -f $FILES_ARCHIVE ]]
 then
   echo "The file $FILES_ARCHIVE does not exist. Aborting."
   echo "Finished: FAILURE."
-  exit 0
+  exit 1
 fi
 
 if [[ ! -f $SQL_ARCHIVE ]]
 then
   echo "The file $SQL_ARCHIVE does not exist. Aborting."
   echo "Finished: FAILURE."
-  exit 0
+  exit 1
 fi
 
 
