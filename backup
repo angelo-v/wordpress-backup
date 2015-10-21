@@ -4,10 +4,12 @@ if [ -z "$MYSQL_ENV_MYSQL_USER" ]; then echo "Error: MYSQL_ENV_MYSQL_USER not se
 if [ -z "$MYSQL_ENV_MYSQL_DATABASE" ]; then echo "Error: MYSQL_ENV_MYSQL_DATABASE not set"; echo "Finished: FAILURE"; exit 1; fi
 if [ -z "$MYSQL_ENV_MYSQL_PASSWORD" ]; then echo "Error: MYSQL_ENV_MYSQL_PASSWORD not set"; echo "Finished: FAILURE"; exit 1; fi
 
+BACKUP_ID=`date '+%Y%m%d-%H%M%S'`
+
 echo 'creating backup archive of /var/www/html'
-tar --create --gzip -vv --directory="/var/www/html/" --file="/backups/backup_`date '+%Y%m%d'`.tar.gz" "./"
+tar --create --gzip -vv --directory="/var/www/html/" --listed-incremental="/backups/.snapshot" --file="/backups/backup_${BACKUP_ID}.tar.gz" "./"
 
 echo 'creating database dump'
-mysqldump -h mysql --add-drop-table -u$MYSQL_ENV_MYSQL_USER -p $MYSQL_ENV_MYSQL_DATABASE --password=$MYSQL_ENV_MYSQL_PASSWORD | bzip2 -c > /backups/backup_`date '+%Y%m%d'`.sql.bz2
+mysqldump -h mysql --add-drop-table -u$MYSQL_ENV_MYSQL_USER -p $MYSQL_ENV_MYSQL_DATABASE --password=$MYSQL_ENV_MYSQL_PASSWORD | bzip2 -c > /backups/backup_${BACKUP_ID}.sql.bz2
 
 echo 'Finished: SUCCESS'

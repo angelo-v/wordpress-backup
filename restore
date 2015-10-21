@@ -42,9 +42,13 @@ fi
 echo "deleting files from /var/www/html/"
 rm -R /var/www/html/*
 
-# restore files
+# restore files (incrementally)
 echo "restoring files from $FILES_ARCHIVE to /var/www/html"
-tar -xzf $FILES_ARCHIVE --directory="/var/www/html/"
+ALL_FILES_ARCHIVES="`ls -1 /backups/*.tar.gz | sort`"
+for F in $ALL_FILES_ARCHIVES; do
+    tar --listed-incremental=/dev/null -xzf $F --directory="/var/www/html/"
+    if [ $F = $FILES_ARCHIVE ]; then break; fi
+done
 
 # update wp-config.php
 sed -i s/"define('DB_NAME', '.*');"/"define('DB_NAME', '$MYSQL_ENV_MYSQL_DATABASE');"/g /var/www/html/wp-config.php
