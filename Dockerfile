@@ -3,7 +3,7 @@ FROM ubuntu
 MAINTAINER Angelo Veltens <angelo.veltens@online.de>
 
 RUN apt-get update && \
-    apt-get install mysql-client -y && \
+    apt-get install mysql-client cron bzip2 -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     mkdir /backups
