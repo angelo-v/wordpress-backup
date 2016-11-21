@@ -2,7 +2,9 @@
 
 cleanup() {
   echo "Cleanup backup older than $CLEANUP_OLDER_THAN days"
-  find /backups/ -mtime +$CLEANUP_OLDER_THAN -exec rm {} \;
+  toberemove=$(find /backups/ -type f -not -name ".*" -mtime +$CLEANUP_OLDER_THAN | wc -l)
+  echo "Will try to remove $toberemove files"
+  find /backups/ -type f -not -name ".*" -mtime +$CLEANUP_OLDER_THAN -exec rm {} \;
 }
 
 if [ -z "$MYSQL_ENV_MYSQL_USER" ]; then echo "Error: MYSQL_ENV_MYSQL_USER not set"; echo "Finished: FAILURE"; exit 1; fi
