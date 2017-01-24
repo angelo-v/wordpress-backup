@@ -90,6 +90,16 @@ Per default wordpress-backup will automatically create a backup at 03:00 am ever
 
 `docker run --name <backup-container-name> --volumes-from=<your-wordpress-container> --link=<your-mysql-container>:mysql -d -e "BACKUP_TIME=0 2 * * *" aveltens/wordpress-backup`
 
+## Automatic cleanup
+
+Per default, wordpress-backup will never delete your backup files, so you can do it yourself, if and when you like.
+
+If you want to delete old backups automatically, you can set the environment variable ```CLEANUP_OLDER_THAN``` to a number of days. In that case wordpress-backup will automatically delete backup older than that, before doing the next backup.
+
+For example ```CLEANUP_OLDER_THAN=100``` will delete any backups, that are older than 100 days, as soon as the next (manual or automatic) backup is done.
+
+*Be aware that the cleanup process does use the unix file last modified date as reference, and not the date in the file name. So a backup called backup_20110101.sql.bz2 that was last modified yesterday, will be only 1 day old!*
+
 ## Migrate your blog to Docker
 
 If your WordPress blog is not yet running in a Docker container, you can migrate it with a few simple steps.
@@ -116,7 +126,7 @@ You have to replace the placeholders in both commands:
 `<wordpress-user>`: The database user that WordPress uses.  
 `<wordpress-password>`: The password of the WordPress database user.  
 
-*Step 2:* 
+*Step 2:*
 
 Create a MySQL container:
 
@@ -219,4 +229,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-
