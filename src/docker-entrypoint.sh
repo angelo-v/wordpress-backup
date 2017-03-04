@@ -8,9 +8,14 @@ then
 MYSQL_ENV_MYSQL_USER=$MYSQL_ENV_MYSQL_USER
 MYSQL_ENV_MYSQL_DATABASE=$MYSQL_ENV_MYSQL_DATABASE
 MYSQL_ENV_MYSQL_PASSWORD=$MYSQL_ENV_MYSQL_PASSWORD
-CLEANUP_OLDER_THAN=$CLEANUP_OLDER_THAN
-$BACKUP_TIME backup > /backup.log
 EOF
+
+  if [[ $CLEANUP_OLDER_THAN ]]
+  then
+    echo "CLEANUP_OLDER_THAN=$CLEANUP_OLDER_THAN" >> backup-cron
+  fi
+  echo "$BACKUP_TIME backup > /backup.log" >> backup-cron
+
   crontab backup-cron
 fi
 
