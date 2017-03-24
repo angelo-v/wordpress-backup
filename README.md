@@ -15,7 +15,7 @@ Precondition: Given you have a WordPress blog and the corresponding MySQL databa
 
 Replace the following values according to your system:
 
-`your-wordpress-container`: The name of the Docker container hosting your blog  
+`your-wordpress-container`: The name of the Docker container hosting your blog
 `your-mysql-container`: The name of the Docker container hosting your blogs MySQL database
 
 *Step 2*: Backup your blog
@@ -44,9 +44,9 @@ To run a backup container, you use the `docker run` command, linking your WordPr
 
 You have to replace the placeholders:
 
-`<backup-container-name>`: A name of your choice to identify the backup container  
-`<your-wordpress-container>`: The name of the WordPress container  
-`<your-mysql-container>`: The name of your MySQL container  
+`<backup-container-name>`: A name of your choice to identify the backup container
+`<your-wordpress-container>`: The name of the WordPress container
+`<your-mysql-container>`: The name of your MySQL container
 
 You may also specify a volume to be able to access the backup files on the Docker host:
 
@@ -120,11 +120,11 @@ Use the following command to back up your blog's HTML contents:
 
 You have to replace the placeholders in both commands:
 
-`</path/to/wordpress>`: The root directory of your WordPress installation.  
-`</path/to/your/backups>`: The folder where you want to store the backup files.  
-`<wordpress-db>`: The name of the WordPress database.  
-`<wordpress-user>`: The database user that WordPress uses.  
-`<wordpress-password>`: The password of the WordPress database user.  
+`</path/to/wordpress>`: The root directory of your WordPress installation.
+`</path/to/your/backups>`: The folder where you want to store the backup files.
+`<wordpress-db>`: The name of the WordPress database.
+`<wordpress-user>`: The database user that WordPress uses.
+`<wordpress-password>`: The password of the WordPress database user.
 
 *Step 2:*
 
@@ -201,6 +201,14 @@ _wordpress.env:_
 ## Source Code
 
 The source code of wordpress-backup can be found at [GitHub](https://github.com/angelo-v/wordpress-backup)
+
+## Contribute
+
+If you want to contribute I am happy to merge your pull request!
+If you do so, please ensure
+
+ * that all automated tests pass (run `./test.sh`)
+ * the documentation is updated (`README.md`)
 
 ## Contact
 
