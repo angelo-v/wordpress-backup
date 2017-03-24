@@ -199,45 +199,7 @@ That's it! `http://localhost:8080/` should show your blog now.
 
 ## Docker Compose example
 
-You may configure your containers using Docker Compose, e.g. like this:
-
-_docker-compose.yml:_
-
-    mysql:
-      image: mysql
-      expose:
-       - 3306
-      env_file:
-       - ./mysql.env
-    wordpress:
-      image: wordpress
-      links:
-       - mysql
-      ports:
-       - "8080:80"
-      env_file:
-       - ./wordpress.env
-    backup:
-      image: aveltens/wordpress-backup
-      volumes:
-       - backups:/backups
-      volumes_from:
-       - wordpress
-      links:
-       - mysql
-
-_mysql.env:_
-
-    MYSQL_ROOT_PASSWORD=<root-password>
-    MYSQL_DATABASE=wordpress
-    MYSQL_USER=wordpress
-    MYSQL_PASSWORD=<user-password>
-
-_wordpress.env:_
-
-    WORDPRESS_DB_NAME=wordpress
-    WORDPRESS_DB_USER=wordpress
-    WORDPRESS_DB_PASSWORD=<user-password>
+Take a look at [wordpress-backup-quickstart](https://github.com/angelo-v/wordpress-backup-quickstart) for a Docker Compose setup.
 
 ## Source Code
 
