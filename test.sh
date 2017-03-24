@@ -1,11 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
-# kill script if any test script fails
-set -e
-
-cd ./test &&
-bundle install &&
-for file in *_spec.rb
-do
-  rspec $file # run all test files separetly, so that different container instances can be tested
-done
+docker run --rm -t \
+  -v $(pwd):/project \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  aveltens/docker-testinfra
