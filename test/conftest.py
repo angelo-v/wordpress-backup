@@ -7,4 +7,5 @@ def client():
 
 @pytest.fixture(scope="session")
 def image(client):
-    return client.images.build(path='./src')
+    img, _ = client.images.build(path='./src')
+    return img

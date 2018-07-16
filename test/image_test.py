@@ -1,7 +1,7 @@
 import docker
 import pytest
 
-testinfra_hosts = ['test_container']
+testinfra_hosts = ['docker://test_container']
 
 @pytest.fixture(scope="module", autouse=True)
 def container(client, image):
@@ -9,11 +9,11 @@ def container(client, image):
     yield container
     container.remove(force=True)
 
-def test_scripts_exist(File):
-    assert File("/bin/backup").is_file
-    assert File("/bin/restore").is_file
+def test_scripts_exist(host):
+    assert host.file("/bin/backup").is_file
+    assert host.file("/bin/restore").is_file
 
-def test_installed_packages(Package):
-    assert Package("cron").is_installed
-    assert Package("bzip2").is_installed
-    assert Package("mysql-client").is_installed
+def test_installed_packages(host):
+    assert host.package("cron").is_installed
+    assert host.package("bzip2").is_installed
+    assert host.package("mysql-client").is_installed
