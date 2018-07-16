@@ -8,6 +8,7 @@ then
     exit 1
 fi
 
+if [ -z "$MYSQL_ENV_MYSQL_HOST" ]; then echo "Error: MYSQL_ENV_MYSQL_HOST not set"; echo "Finished: FAILURE"; exit 1; fi
 if [ -z "$MYSQL_ENV_MYSQL_USER" ]; then echo "Error: MYSQL_ENV_MYSQL_USER not set"; echo "Finished: FAILURE"; exit 1; fi
 if [ -z "$MYSQL_ENV_MYSQL_DATABASE" ]; then echo "Error: MYSQL_ENV_MYSQL_DATABASE not set"; echo "Finished: FAILURE"; exit 1; fi
 if [ -z "$MYSQL_ENV_MYSQL_PASSWORD" ]; then echo "Error: MYSQL_ENV_MYSQL_PASSWORD not set"; echo "Finished: FAILURE"; exit 1; fi
@@ -50,13 +51,13 @@ tar -xzf $FILES_ARCHIVE --directory="/var/www/html/"
 sed -i s/"define('DB_NAME', '.*');"/"define('DB_NAME', '$MYSQL_ENV_MYSQL_DATABASE');"/g /var/www/html/wp-config.php
 sed -i s/"define('DB_USER', '.*');"/"define('DB_USER', '$MYSQL_ENV_MYSQL_USER');"/g /var/www/html/wp-config.php
 sed -i s/"define('DB_PASSWORD', '.*');"/"define('DB_PASSWORD', '$MYSQL_ENV_MYSQL_PASSWORD');"/g /var/www/html/wp-config.php
-sed -i s/"define('DB_HOST', '.*');"/"define('DB_HOST', 'mysql:$MYSQL_PORT_3306_TCP_PORT');"/g /var/www/html/wp-config.php
+sed -i s/"define('DB_HOST', '.*');"/"define('DB_HOST', '$MYSQL_ENV_MYSQL_HOST:$MYSQL_PORT_3306_TCP_PORT');"/g /var/www/html/wp-config.php
 
 # set correct file owner
 chown -R www-data:www-data /var/www/html
 
 # restore database
 echo "restoring data from mysql dump file $SQL_ARCHIVE"
-bunzip2 < $SQL_ARCHIVE | mysql -u$MYSQL_ENV_MYSQL_USER -p $MYSQL_ENV_MYSQL_DATABASE -p$MYSQL_ENV_MYSQL_PASSWORD -h mysql 
+bunzip2 < $SQL_ARCHIVE | mysql -u$MYSQL_ENV_MYSQL_USER -p $MYSQL_ENV_MYSQL_DATABASE -p$MYSQL_ENV_MYSQL_PASSWORD -h $MYSQL_ENV_MYSQL_HOST
 
 echo 'Finished: SUCCESS'
