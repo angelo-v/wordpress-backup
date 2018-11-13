@@ -15,6 +15,7 @@ def container(client, image):
             'MYSQL_ENV_MYSQL_DATABASE=test_db',
             'MYSQL_ENV_MYSQL_PASSWORD=test_password',
             'BACKUP_TIME=1 2 3 4 5',
+            'BACKUP_ENV_BACKUP_NAME=example.com',
             'CLEANUP_OLDER_THAN=100'
         ]
     )
@@ -27,6 +28,7 @@ def test_environment(host):
     assert "MYSQL_ENV_MYSQL_USER=test_user" in env
     assert "MYSQL_ENV_MYSQL_DATABASE=test_db" in env
     assert "MYSQL_ENV_MYSQL_PASSWORD=test_password" in env
+    assert "BACKUP_ENV_BACKUP_NAME=example.com" in env
     assert "BACKUP_TIME=1 2 3 4 5" in env
     assert "CLEANUP_OLDER_THAN=100" in env
 
