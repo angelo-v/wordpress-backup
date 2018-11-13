@@ -110,6 +110,18 @@ Per default wordpress-backup will automatically create a backup at 03:00 am ever
       -e "BACKUP_TIME=0 2 * * *" \
       -d aveltens/wordpress-backup
 
+## Named backups
+
+Per default wordpress-backup will automatically create a backup file with a "backup" prefix and a timestamp suffix as the filename prior to the extension. These two are separated by an underscore. You can adjust the default prefix by supplying the BACKUP_NAME when creating the container. E.g. the following statement will create a container that does a backup at 2:00 am every day with a suffix of "example.com" resulting in the file "/backups/example.com_20140200.tar.gz":
+
+    docker run \
+      --name <backup-container-name> \
+      --volumes-from=<your-wordpress-container> \
+      --link=<your-mysql-container>:mysql \
+      -e "BACKUP_TIME=0 2 * * *" \
+      -e "BACKUP_NAME=example.com" \
+      -d aveltens/wordpress-backup
+
 ## Automatic cleanup
 
 Per default, wordpress-backup will never delete your backup files, so you can do it yourself, if and when you like.

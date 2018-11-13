@@ -24,7 +24,7 @@ def test_environment(host):
     assert "MYSQL_ENV_MYSQL_USER=test_user" in env
     assert "MYSQL_ENV_MYSQL_DATABASE=test_db" in env
     assert "MYSQL_ENV_MYSQL_PASSWORD=test_password" in env
-    assert "BACKUP_ENV_BACKUP_NAME=backup" in env
+    assert "BACKUP_NAME=backup" in env
     assert "BACKUP_TIME=0 3 * * *" in env
 
 def test_crontab(host):

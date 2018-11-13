@@ -10,6 +10,7 @@ RUN apt-get update && \
 
 ENV MYSQL_ENV_MYSQL_HOST mysql
 ENV BACKUP_TIME 0 3 * * *
+ENV BACKUP_NAME backup
 
 COPY docker-entrypoint.sh /entrypoint.sh
 COPY backup restore /bin/

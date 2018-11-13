@@ -11,7 +11,7 @@ if [ -z "$MYSQL_ENV_MYSQL_HOST" ]; then echo "Error: MYSQL_ENV_MYSQL_HOST not se
 if [ -z "$MYSQL_ENV_MYSQL_USER" ]; then echo "Error: MYSQL_ENV_MYSQL_USER not set"; echo "Finished: FAILURE"; exit 1; fi
 if [ -z "$MYSQL_ENV_MYSQL_DATABASE" ]; then echo "Error: MYSQL_ENV_MYSQL_DATABASE not set"; echo "Finished: FAILURE"; exit 1; fi
 if [ -z "$MYSQL_ENV_MYSQL_PASSWORD" ]; then echo "Error: MYSQL_ENV_MYSQL_PASSWORD not set"; echo "Finished: FAILURE"; exit 1; fi
-if [ -z "$BACKUP_ENV_BACKUP_NAME" ]; then export BACKUP_ENV_BACKUP_NAME=backup; fi
+if [ -z "$BACKUP_NAME" ]; then export BACKUP_NAME=backup; fi
 
 if [ -n "$CLEANUP_OLDER_THAN" ]; then cleanup;  fi
 
@@ -19,6 +19,6 @@ echo 'creating backup archive of /var/www/html'
 tar --create --gzip -vv --directory="/var/www/html/" --file="/backups/backup_`date '+%Y%m%d'`.tar.gz" "./"
 
 echo 'creating database dump'
-mysqldump -h $MYSQL_ENV_MYSQL_HOST --add-drop-table -u$MYSQL_ENV_MYSQL_USER -p $MYSQL_ENV_MYSQL_DATABASE --password=$MYSQL_ENV_MYSQL_PASSWORD | bzip2 -c > /backups/${BACKUP_ENV_BACKUP_NAME}_`date '+%Y%m%d'`.sql.bz2
+mysqldump -h $MYSQL_ENV_MYSQL_HOST --add-drop-table -u$MYSQL_ENV_MYSQL_USER -p $MYSQL_ENV_MYSQL_DATABASE --password=$MYSQL_ENV_MYSQL_PASSWORD | bzip2 -c > /backups/${BACKUP_NAME}_`date '+%Y%m%d'`.sql.bz2
 
 echo 'Finished: SUCCESS'
