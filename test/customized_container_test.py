@@ -38,4 +38,5 @@ MYSQL_ENV_MYSQL_USER=test_user
 MYSQL_ENV_MYSQL_DATABASE=test_db
 MYSQL_ENV_MYSQL_PASSWORD=test_password
 CLEANUP_OLDER_THAN=100
+BACKUP_NAME=example.com
 1 2 3 4 5 backup > /backup.log"""

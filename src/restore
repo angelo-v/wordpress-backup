@@ -13,7 +13,7 @@ if [ -z "$MYSQL_ENV_MYSQL_USER" ]; then echo "Error: MYSQL_ENV_MYSQL_USER not se
 if [ -z "$MYSQL_ENV_MYSQL_DATABASE" ]; then echo "Error: MYSQL_ENV_MYSQL_DATABASE not set"; echo "Finished: FAILURE"; exit 1; fi
 if [ -z "$MYSQL_ENV_MYSQL_PASSWORD" ]; then echo "Error: MYSQL_ENV_MYSQL_PASSWORD not set"; echo "Finished: FAILURE"; exit 1; fi
 if [ -z "$MYSQL_PORT_3306_TCP_PORT" ]; then echo "Error: MYSQL_PORT_3306_TCP_PORT not set"; echo "Finished: FAILURE"; exit 1; fi
-if [ -z "$BACKUP_NAME" ]; then export BACKUP_NAME=backup; fi
+if [ -z "$BACKUP_NAME" ]; then echo "Error: BACKUP_NAME not set"; echo "Finished: FAILURE"; exit 1; fi
 
 if ! [[ $1 =~ ^[a-zA-Z0-9_-]+$ ]]
 then
