@@ -139,8 +139,7 @@ Use the following command to back up your blog's HTML contents:
 ...and this command to backup your blog's database:
 
     mysqldump --add-drop-table \
-      -u<wordpress-user> -p <wordpress-db> \
-      --password=<wordpress-password> | \
+      -u<wordpress-user> -p<wordpress-password> <wordpress-db> \
       bzip2 -c > </path/to/your/backups>/backup_0.sql.bz2`
 
 You have to replace the placeholders in both commands:
