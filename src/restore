@@ -1,6 +1,7 @@
 #!/bin/bash
+set -e
 
-if ! [[ $1 ]]
+if ! [[ "$1" ]]
 then
     echo "Error: Backup name missing"
     echo "Please specify a backup name, e.g. 'restore 20141104'"
@@ -24,14 +25,14 @@ fi
 FILES_ARCHIVE="/backups/backup_$1.tar.gz"
 SQL_ARCHIVE="/backups/backup_$1.sql.bz2"
 
-if [[ ! -f $FILES_ARCHIVE ]]
+if [[ ! -f "${FILES_ARCHIVE}" ]]
 then
   echo "The file $FILES_ARCHIVE does not exist. Aborting."
   echo "Finished: FAILURE."
   exit 1
 fi
 
-if [[ ! -f $SQL_ARCHIVE ]]
+if [[ ! -f "${SQL_ARCHIVE}" ]]
 then
   echo "The file $SQL_ARCHIVE does not exist. Aborting."
   echo "Finished: FAILURE."
@@ -45,7 +46,7 @@ rm -R /var/www/html/*
 
 # restore files
 echo "restoring files from $FILES_ARCHIVE to /var/www/html"
-tar -xzf $FILES_ARCHIVE --directory="/var/www/html/"
+tar -xzf "${FILES_ARCHIVE}" --directory="/var/www/html/"
 
 # update wp-config.php
 sed -i s/"define('DB_NAME', '.*');"/"define('DB_NAME', '$MYSQL_ENV_MYSQL_DATABASE');"/g /var/www/html/wp-config.php
@@ -58,6 +59,6 @@ chown -R www-data:www-data /var/www/html
 
 # restore database
 echo "restoring data from mysql dump file $SQL_ARCHIVE"
-bunzip2 < $SQL_ARCHIVE | mysql -u$MYSQL_ENV_MYSQL_USER -p $MYSQL_ENV_MYSQL_DATABASE -p$MYSQL_ENV_MYSQL_PASSWORD -h $MYSQL_ENV_MYSQL_HOST
+bunzip2 < "${SQL_ARCHIVE}" | mysql --user="${MYSQL_ENV_MYSQL_USER}" -p "${MYSQL_ENV_MYSQL_DATABASE}" --password="${MYSQL_ENV_MYSQL_PASSWORD}" -h "${MYSQL_ENV_MYSQL_HOST}"
 
 echo 'Finished: SUCCESS'
