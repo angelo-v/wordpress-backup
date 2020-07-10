@@ -19,6 +19,6 @@ echo 'creating backup archive of /var/www/html'
 tar --create --gzip -vv --directory="/var/www/html/" --file="/backups/backup_`date '+%Y%m%d'`.tar.gz" "./"
 
 echo 'creating database dump'
-mysqldump --host="${MYSQL_ENV_MYSQL_HOST}" --add-drop-table --user="${MYSQL_ENV_MYSQL_USER}" --password="${MYSQL_ENV_MYSQL_PASSWORD}" "${MYSQL_ENV_MYSQL_DATABASE}" | bzip2 -c > "/backups/backup_`date '+%Y%m%d'`.sql.bz2"
+mysqldump --host="${MYSQL_ENV_MYSQL_HOST}" --add-drop-table --user="${MYSQL_ENV_MYSQL_USER}" --password="${MYSQL_ENV_MYSQL_PASSWORD}" "${MYSQL_ENV_MYSQL_DATABASE}" --single-transaction --column-statistics=0 | bzip2 -c > "/backups/backup_`date '+%Y%m%d'`.sql.bz2"
 
 echo 'Finished: SUCCESS'
