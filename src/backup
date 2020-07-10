@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+set -o pipefail
 
 cleanup() {
   echo "Cleanup backup older than $CLEANUP_OLDER_THAN days"
