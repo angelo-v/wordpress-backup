@@ -1,5 +1,15 @@
 #!/bin/bash
 
+backup_log() {
+	local type="$1"; shift
+	printf '%s [%s] [Entrypoint]: %s\n' "$(date --rfc-3339=seconds)" "$type" "$*"
+}
+
+backup_error() {
+	mysql_log ERROR "$@" >&2
+	exit 1
+}
+
 # usage: file_env VAR [DEFAULT]
 #    ie: file_env 'XYZ_DB_PASSWORD' 'example'
 # (will allow for "$XYZ_DB_PASSWORD_FILE" to fill in the value of
@@ -9,7 +19,7 @@ file_env() {
 	local fileVar="${var}_FILE"
 	local def="${2:-}"
 	if [ "${!var:-}" ] && [ "${!fileVar:-}" ]; then
-		mysql_error "Both $var and $fileVar are set (but are exclusive)"
+		backup_error "Both $var and $fileVar are set (but are exclusive)"
 	fi
 	local val="$def"
 	if [ "${!var:-}" ]; then
@@ -26,7 +36,7 @@ then
   echo "Creating cron entry to start backup at: $BACKUP_TIME"
   # Note: Must use tabs with indented 'here' scripts.
   cat <<-EOF >> backup-cron
-file_env 'MYSQL_ENV_MYSQL_HOST'
+file_env 'MYSQL_ENV_MYSQL_HOST' '%'
 file_env 'MYSQL_ENV_MYSQL_USER'
 file_env 'MYSQL_ENV_MYSQL_DATABASE'
 file_env 'MYSQL_ENV_MYSQL_PASSWORD'
