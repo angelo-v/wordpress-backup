@@ -31,15 +31,24 @@ file_env() {
 	unset "$fileVar"
 }
 
+docker_setup_env() {
+	file_env 'MYSQL_ENV_MYSQL_HOST' '%'
+	file_env 'MYSQL_ENV_MYSQL_USER'
+	file_env 'MYSQL_ENV_MYSQL_DATABASE'
+	file_env 'MYSQL_ENV_MYSQL_PASSWORD'
+}
+
+docker_setup_env;
+
 if ! [ -f backup-cron ]
 then
   echo "Creating cron entry to start backup at: $BACKUP_TIME"
   # Note: Must use tabs with indented 'here' scripts.
   cat <<-EOF >> backup-cron
-file_env 'MYSQL_ENV_MYSQL_HOST' '%'
-file_env 'MYSQL_ENV_MYSQL_USER'
-file_env 'MYSQL_ENV_MYSQL_DATABASE'
-file_env 'MYSQL_ENV_MYSQL_PASSWORD'
+MYSQL_ENV_MYSQL_HOST=$MYSQL_ENV_MYSQL_HOST
+MYSQL_ENV_MYSQL_USER=$MYSQL_ENV_MYSQL_USER
+MYSQL_ENV_MYSQL_DATABASE=$MYSQL_ENV_MYSQL_DATABASE
+MYSQL_ENV_MYSQL_PASSWORD=$MYSQL_ENV_MYSQL_PASSWORD
 EOF
 
   if [[ $CLEANUP_OLDER_THAN ]]
