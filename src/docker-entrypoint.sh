@@ -6,7 +6,7 @@ backup_log() {
 }
 
 backup_error() {
-	mysql_log ERROR "$@" >&2
+	backup_log ERROR "$@" >&2
 	exit 1
 }
 
