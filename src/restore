@@ -49,10 +49,10 @@ echo "restoring files from $FILES_ARCHIVE to /var/www/html"
 tar -xzf "${FILES_ARCHIVE}" --directory="/var/www/html/"
 
 # update wp-config.php
-sed -i s/"define('DB_NAME', '.*');"/"define('DB_NAME', '$MYSQL_ENV_MYSQL_DATABASE');"/g /var/www/html/wp-config.php
-sed -i s/"define('DB_USER', '.*');"/"define('DB_USER', '$MYSQL_ENV_MYSQL_USER');"/g /var/www/html/wp-config.php
-sed -i s/"define('DB_PASSWORD', '.*');"/"define('DB_PASSWORD', '$MYSQL_ENV_MYSQL_PASSWORD');"/g /var/www/html/wp-config.php
-sed -i s/"define('DB_HOST', '.*');"/"define('DB_HOST', '$MYSQL_ENV_MYSQL_HOST:$MYSQL_PORT_3306_TCP_PORT');"/g /var/www/html/wp-config.php
+sed -i s|"define('DB_NAME', '.*');"/"define('DB_NAME', '$MYSQL_ENV_MYSQL_DATABASE');"|g /var/www/html/wp-config.php
+sed -i s|"define('DB_USER', '.*');"/"define('DB_USER', '$MYSQL_ENV_MYSQL_USER');"|g /var/www/html/wp-config.php
+sed -i s|"define('DB_PASSWORD', '.*');"/"define('DB_PASSWORD', '$MYSQL_ENV_MYSQL_PASSWORD');"|g /var/www/html/wp-config.php
+sed -i s|"define('DB_HOST', '.*');"/"define('DB_HOST', '$MYSQL_ENV_MYSQL_HOST:$MYSQL_PORT_3306_TCP_PORT');"|g /var/www/html/wp-config.php
 
 # set correct file owner
 chown -R www-data:www-data /var/www/html
